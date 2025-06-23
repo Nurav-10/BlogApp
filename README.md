@@ -1,36 +1,15 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Blog App UI Screenshots
+![Screenshot 2025-06-23 113537](https://github.com/user-attachments/assets/a976657b-e088-4e9c-9ebb-05347bbdb7fc)
+![Screenshot 2025-06-23 113621](https://github.com/user-attachments/assets/a51e260b-9ab8-4a79-beb2-f598e3dc01ae)
+![Screenshot 2025-06-23 113706](https://github.com/user-attachments/assets/c176be26-944e-4606-a774-b6208cd76144)
+![Screenshot 2025-06-23 113716](https://github.com/user-attachments/assets/d64fbc7a-1755-4e7b-b688-2676ed1b91d8)
+![Screenshot 2025-06-23 113907](https://github.com/user-attachments/assets/aa508019-e52e-43e2-8052-46b609027884)
+![Screenshot 2025-06-23 113745](https://github.com/user-attachments/assets/3f4a400b-4a58-4732-ac1f-19465022cbd8)
+![Screenshot 2025-06-23 113853](https://github.com/user-attachments/assets/e97d230a-e092-4ca8-89a6-562127cc8194)
+![Screenshot 2025-06-23 113838](https://github.com/user-attachments/assets/15b31b02-d52a-4a94-b9cf-e88b98b33d04)
+![Screenshot 2025-06-23 113827](https://github.com/user-attachments/assets/2da87014-c963-4efe-9ca5-28a62137faf8)
+![Screenshot 2025-06-23 113939](https://github.com/user-attachments/assets/c0855d3d-706a-486e-a2e6-d06d7b26eba8)
+![Screenshot 2025-06-23 114026](https://github.com/user-attachments/assets/29cb5b7c-5a3e-4854-a0d8-ab141bf02526)
+![Screenshot 2025-06-23 114040](https://github.com/user-attachments/assets/ac614d63-81c3-47f2-b6d3-a4461da174a6)
+![Screenshot 2025-06-23 114101](https://github.com/user-attachments/assets/3a41e645-28c1-43f2-8090-8a2ad6a37391)
+![Screenshot 2025-06-23 113923](https://github.com/user-attachments/assets/a7e3c13c-41a9-4281-a76e-846d3c2fc8b1)
