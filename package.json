@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "install": "npm install --legacy-peer-deps"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -47,6 +48,5 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.4",
     "typescript": "^5"
-  },
-  "packageManager": "yarn@4.9.2"
+  }
 }
