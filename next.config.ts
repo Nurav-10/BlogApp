@@ -8,7 +8,28 @@ const nextConfig: NextConfig = {
     }
   }
   ,images:{
-    domains:['images.unsplash.com','unsplash.com','plus.unsplash.com','img.freepik.com','res.cloudinary.com']
+    remotePatterns:[
+      {
+        protocol:'https',
+        hostname:'images.unsplash.com'
+      },
+      {
+        protocol:'https',
+        hostname:'unsplash.com'
+      },
+      {
+        protocol:'https',
+        hostname:'plus.unsplash.com'
+      },
+      {
+        protocol:'https',
+        hostname:'res.cloudinary.com'
+      },
+      {
+        protocol:'https',
+        hostname:'img.freepik.com'
+      }
+    ]
   }
 };
 
