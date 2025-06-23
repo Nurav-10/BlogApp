@@ -27,7 +27,6 @@ const page = () => {
   const router = useRouter();
   const session = useSession();
   const [isPending, startTransition] = useTransition();
-
   const [data, setData] = useState<Data | null>(null);
   const [modal, setModal] = useState(false);
   const [owner, setOwner] = useState(false);
@@ -47,6 +46,8 @@ const page = () => {
           setNewTitle(res.data.title);
           setNewDescription(res.data.description);
           setNewContent(res.data.content);
+
+          
           if (session?.data?.user?.email === res.data.author.email)
             setOwner(true);
         } else {

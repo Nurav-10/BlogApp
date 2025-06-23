@@ -60,7 +60,6 @@ const page = () => {
   
       const response = await PostForm(formdata)
       if (response.success) {
-        console.log("Post created successfully");
         toast.success("Post Created Successfully");
         router.push('/blogs')
       } else {

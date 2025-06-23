@@ -20,7 +20,6 @@ export async function POST(
       return NextResponse.json({
         success: true,
         message: "Comment Posted Successfully",
-        comment:res.content
       });
     } else {
       return NextResponse.json({

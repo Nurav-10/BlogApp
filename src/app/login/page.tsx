@@ -7,10 +7,8 @@ import { toast } from "sonner"
 const page = () => {
   const session=useSession()
   const router=useRouter()
-  console.log(session)
   session.status==='authenticated'&&
-  router.push('/') &&
-  toast.success('you are logged in')
+  router.push('/')
    return <Loginform/>
     
 }

@@ -23,7 +23,7 @@ export async function POST(request:Request,{params}:{params:{postId:string}}){
       await Comment.findByIdAndUpdate(parentId,{
          $push:{replies:reply._id},
          $set:{updatedAt:new Date()}
-      }).populate('author','profilePicture')
+      })
 
       return NextResponse.json({success:true,reply},{status:201});
    }

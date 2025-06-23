@@ -65,7 +65,7 @@ const BlogsPage = () => {
         </div>
         {canCreate && (
           <button
-            className="text-white absolute bottom-2 bg-black hover:bg-amber-200 px-4 py-2 dark:bg-white rounded-md dark:text-black transition-all duration-200 hover:scale-102 font-semibold left-15 z-99 shadow-sm shadow-amber-200"
+            className="text-white fixed left-5 bottom-5 bg-black hover:bg-amber-200 px-4 py-2 dark:bg-white rounded-md dark:text-black transition-all duration-200 hover:scale-102 font-semibold  z-99 shadow-sm shadow-amber-200"
             onClick={() => router.push("/blogs/create")}
           >
             Create Blog
@@ -89,11 +89,11 @@ const BlogsPage = () => {
           })}
         </div>
 
-        <div className="w-full h-screen grid grid-cols-3 p-5 gap-2">
+        <div className="w-full h-full grid grid-cols-3 p-5 gap-2">
           {data.map((blog: blog) => {
             return (
               <Card
-                className="w-fit p-3 hover:scale-101 trnsition-all duration-300 ease-linear cursor-pointer"
+                className="max-h-[40vh] overflow-hidden p-3 hover:scale-101 trnsition-all duration-300 ease-linear cursor-pointer"
                 onClick={() => router.push(`/blogs/${blog._id}`)}
               >
                 <CardTitle>{blog.title}</CardTitle>
