@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Card, CardHeader } from "./ui/card";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -121,6 +121,8 @@ interface Comment {
 const CommentSection = ({ postId }: { postId: string }) => {
   const session = useSession();
   const router = useRouter();
+  const [refresh, setRefresh] = useState(false);
+  const [isPending,startTransition]=useTransition()
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [repliesOpen, setRepliesOpen] = useState(false);
@@ -129,6 +131,26 @@ const CommentSection = ({ postId }: { postId: string }) => {
   const [content, setContent] = useState("");
   const [commentReply, setCommentReply] = useState("");
   const [reloadComment, setReloadComment] = useState(false);
+  useEffect(() => {
+    //iife
+    try {
+      (async () => {
+        //logic to get comments.
+        const response = await fetch(`/api/posts/${postId}/comment`);
+
+        const res = await response.json();
+
+        if (res.data) {
+          setComments(res.data);
+          setLoading(false);
+        } else if (res.status && res.data.length === 0) {
+          setMessage(res.message);
+        }
+      })();
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  }, [postId, reloadComment, refresh]);
   const toggleReply = (id: string) => {
     //if already opened. filter it out. if not then open it
 
@@ -155,7 +177,9 @@ const CommentSection = ({ postId }: { postId: string }) => {
     }
   };
   const createComment = async () => {
-    try {
+    
+      startTransition(async()=>{
+        try {
       const res = await fetch(`/api/posts/${postId}/comment/create`, {
         method: "POST",
         body: JSON.stringify({
@@ -173,34 +197,37 @@ const CommentSection = ({ postId }: { postId: string }) => {
       } else {
         toast.error("Comment not posted");
       }
-    } catch (err: any) {
+     } catch (err: any) {
       console.log(err.message);
     }
+  })
   };
   const createReply = async (parentCommentId: string) => {
     if (commentReply.length < 1)
       return toast.success("Reply can be of atleast 1 character");
+    startTransition(async()=>{
 
-    try {
-      const response = await fetch(`/api/posts/${postId}/comment/reply`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: commentReply,
-          author: session.data?.user?.id?.toString(),
-          parentId: parentCommentId,
-        }),
-      });
-
-      const res = await response.json();
-      if (res.reply) {
-        setReloadComment((prev) => !prev);
-      } else {
-        console.log(res.message);
+      try {
+        const response = await fetch(`/api/posts/${postId}/comment/reply`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: commentReply,
+            author: session.data?.user?.id?.toString(),
+            parentId: parentCommentId,
+          }),
+        });
+  
+        const res = await response.json();
+        if (res.reply) {
+          setRefresh((prev) => !prev);
+        } else {
+          console.log(res.message);
+        }
+      } catch (err: any) {
+        console.log(err.message);
       }
-    } catch (err: any) {
-      console.log(err.message);
-    }
+    })
   };
 
   const deleteReply = async (commentId: string) => {
@@ -214,29 +241,10 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
     if (res.success) {
       setReloadComment((prev) => !prev);
+      setRefresh(prev=>!prev)
       toast.success(res.message);
     } else toast.error(res.message);
   };
-  useEffect(() => {
-    //iife
-    try {
-      (async () => {
-        //logic to get comments.
-        const response = await fetch(`/api/posts/${postId}/comment`);
-
-        const res = await response.json();
-
-        if (res.data) {
-          setComments(res.data);
-          setLoading(false);
-        } else if (res.status && res.data.length === 0) {
-          setMessage(res.message);
-        }
-      })();
-    } catch (err: any) {
-      console.log(err.message);
-    }
-  }, [postId, reloadComment]);
 
   loading && session.status === "loading" && <h2>Loading</h2>;
   return (
@@ -267,11 +275,13 @@ const CommentSection = ({ postId }: { postId: string }) => {
             }}
             className="text-zinc-700"
           />
-          {session.status==='unauthenticated' && <Link href="/login" className="hover:text-blue-400 text-sm">
-            You need to Signin for commenting
-          </Link>}
-          <Button type="submit" className="mt-2 w-30">
-            Comment
+          {session.status === "unauthenticated" && (
+            <Link href="/login" className="hover:text-blue-400 text-sm">
+              You need to Signin for commenting
+            </Link>
+          )}
+          <Button type="submit" disabled={isPending} className="mt-2 w-30">
+          {isPending?'Commenting':'Comment'}
           </Button>
         </form>
         {comments.length !== 0 && (
@@ -428,7 +438,9 @@ const CommentSection = ({ postId }: { postId: string }) => {
                               value={commentReply}
                               onChange={(e) => setCommentReply(e.target.value)}
                             />
-                            <Button type="submit">Reply</Button>
+                            <Button type="submit" disabled={isPending}>
+                              {isPending?'Replying':'Reply'}
+                              </Button>
                           </form>
                         </div>
                       </div>

@@ -76,7 +76,7 @@ const BlogsPage = () => {
             sideNav ? "flex" : "hidden"
           } flex-col gap-5 py-3 px-2 z-99`}
         >
-          {data.map((blog: blog, index) => {
+          {data.map((blog: blog, index:number) => {
             return (
               <li
                 className="list-none hover:text-blue-500 cursor-pointer"
@@ -89,10 +89,10 @@ const BlogsPage = () => {
           })}
         </div>
 
-        <div className="w-full h-full grid grid-cols-3 p-5 gap-2">
-          {data.map((blog: blog) => {
+        <div className="w-full h-full grid md:grid-cols-3 grid-cols-2 p-5 gap-2">
+          {data.map((blog: blog,index:number) => {
             return (
-              <Card
+              <Card key={index}
                 className="max-h-[40vh] overflow-hidden p-3 hover:scale-101 trnsition-all duration-300 ease-linear cursor-pointer"
                 onClick={() => router.push(`/blogs/${blog._id}`)}
               >

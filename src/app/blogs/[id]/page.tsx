@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {date} from "@/utils/date";
-import { Cross, CrossIcon, Navigation2, X } from "lucide-react";
+import { date } from "@/utils/date";
+import { ArrowBigUpDash, Cross, CrossIcon, Navigation2, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
@@ -30,7 +30,12 @@ const page = () => {
   const [data, setData] = useState<Data | null>(null);
   const [modal, setModal] = useState(false);
   const [owner, setOwner] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [vote, setVotes] = useState(0);
+  const [voted, setVoted] = useState(false);
+  const [voteId,setVoteId]=useState('')
+  const [upvoteData,setUpvoteData]=useState<any|null>(null)
   const { id } = useParams();
 
   useEffect(() => {
@@ -47,7 +52,6 @@ const page = () => {
           setNewDescription(res.data.description);
           setNewContent(res.data.content);
 
-          
           if (session?.data?.user?.email === res.data.author.email)
             setOwner(true);
         } else {
@@ -58,11 +62,84 @@ const page = () => {
       }
     };
     fetchDetails();
-  }, [id]);
+
+    (async () => {
+      try {
+        const response = await fetch(`/api/posts/${id}/upvotes/countUpvote`, {
+          method: "GET",
+        });
+        const res = await response.json();
+           setVotes(res.data.length);
+           
+       if(res.data.filter((i:any)=>(i.userId))[0]){
+        setVoteId(res.data.filter((i:any)=>(i.userId))[0]._id)
+         setVoted(true)
+        }
+      else
+      setVoted(false)
+      
+        
+      } catch (err: any) {
+        toast.message(err.message);
+      }
+    })();
+   
+ 
+    
+  }, [id, refresh]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newContent, setNewContent] = useState("");
+
+
+   const increaseUpvote = () => 
+    {
+      const createUpvote=async()=>{
+        try{
+        const response=await fetch(`/api/posts/${id}/upvotes/createUpvote`,
+          {
+            method:"POST",
+            body:JSON.stringify({postId:id,userId:session.data?.user?.id})
+          }
+        )
+        setVotes(prev=>prev+1)
+        setVoted(true)
+        setRefresh(prev=>!prev)
+      }
+      catch(err:any){
+        toast.error(err.message)
+      }
+      }
+      createUpvote()
+    }
+  
+  
+
+  const decreaseUpvote=()=>{
+      const deleteUpvote=async()=>{
+        try{
+        const response=await fetch(`/api/posts/${id}/upvotes/deleteUpvote`,
+          {
+            method:"DELETE",
+            body:JSON.stringify({id:voteId,postId:id,userId:session.data?.user?.id})
+          }
+        )
+        const res=await response.json()
+        if(res.success){
+        console.log(res)
+        setVotes(prev=>prev-1)
+        setVoted(false)
+        setRefresh(prev=>!prev)
+        }
+      }
+      catch(err:any){
+        console.log(err.message)
+      }
+      }
+      deleteUpvote()
+    }
+
 
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +159,7 @@ const page = () => {
         if (response.success) {
           toast.success("Post Updated Successfully");
           console.log(response.data);
-          router.refresh();
+          setRefresh((prev) => !prev);
           setEdit(false);
         } else {
           toast.error("Post Cannot Updated Successfully");
@@ -109,6 +186,7 @@ const page = () => {
     }
   };
 
+  
   if (!data)
     return <h2 className="text-zinc-500 text-xl p-3 ">Loading Post...</h2>;
   return (
@@ -143,28 +221,39 @@ const page = () => {
         </div>
         <p>{data.description}</p>
         <p>{data.content}</p>
-        {
-          session.data?.user?.email===data.author.email &&
-          <div className="flex flex-row gap-2"
-          >
-          <button
-            className={` bg-red-500 w-30 hover:bg-red-700 rounded-md px-3 py-1 border-1 mr-3 text-white border-white`}
-            onClick={() => setModal((pre) => !pre)}
-          >
-            Delete Post
-          </button>
-          <button
-            className="dark:bg-white bg-zinc-900 w-30 text-white dark:text-black hover:bg-orange-200 hover:text-black rounded-md px-3 py-1"
-            onClick={() => setEdit((prev) => !prev)}
+        <button
+        disabled={!session.data?.user?.email}
+          className={`flex flex-row w-fit gap-2 items-center px-3 py-1 rounded-md border hover:border-blue-400 hover:text-blue-400 ${
+            voted && "border-blue-400 text-blue-400 transition  duration-200"
+          }`}
+          onClick={() => {
+            voted?decreaseUpvote():increaseUpvote() 
+          }}
+        >
+          <ArrowBigUpDash className="hover:fill-blue-500" size={20} />
+          <span>{vote} Upvote</span>
+        </button>
+        {!session.data?.user?.email && <h2 className="w-fit px-2 bg-zinc-900/20 hover:text-blue-500 border rounded-md cursor-pointer" onClick={()=>router.push('/login')}>SignIn to Upvote</h2>}
+        {session.data?.user?.email === data.author.email && (
+          <div className="flex flex-row gap-2">
+            <button
+              className={` bg-red-500 w-30 hover:bg-red-700 rounded-md px-3 py-1 border-1 mr-3 text-white border-white`}
+              onClick={() => setModal((pre) => !pre)}
             >
-            Edit Post
-          </button>
-        </div>
-          }
+              Delete Post
+            </button>
+            <button
+              className="dark:bg-white bg-zinc-900 w-30 text-white dark:text-black hover:bg-orange-200 hover:text-black rounded-md px-3 py-1"
+              onClick={() => setEdit((prev) => !prev)}
+            >
+              Edit Post
+            </button>
+          </div>
+        )}
       </div>
       <div>
         {modal && (
-          <div className="dialog font-semibold bg-zinc-900 px-5 py-3 z-90 flex flex-col gap-3 rounded-md border-1 border-white absolute top-[50%] left-[50%] -translate-x-50 -translate-y-50 text-white">
+          <div className="dialog font-semibold bg-zinc-900 px-5 py-3 z-90 flex flex-col gap-3 rounded-md border-1 border-white  top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 fixed text-white">
             <h2>Please confirm that you want to delete this blog post?</h2>
             <div className="flex gap-3">
               <button
@@ -238,8 +327,7 @@ const page = () => {
         {session.status === "loading" ? (
           <h2>Loading Comments</h2>
         ) : (
-          
-          <CommentSection postId={data._id}/>
+          <CommentSection postId={data._id} />
         )}
       </div>
     </>

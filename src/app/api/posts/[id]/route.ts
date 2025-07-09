@@ -10,7 +10,7 @@ export async function GET(
 
   try {
     const {id}=await params
-    const response = await Post.findOne({_id:id}).populate('author', 'username email ');
+    const response = await Post.findOne({_id:id,published:true}).populate('author', 'username email ');
     if (!response){
       return NextResponse.json({
         success: false,

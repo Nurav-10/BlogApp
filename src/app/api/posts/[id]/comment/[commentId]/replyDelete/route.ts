@@ -6,7 +6,7 @@ import { success } from "zod/v4";
 export async function DELETE(request:Request,{params}:{params:{commentId:string}}){
 
    await db()
-   const commentId=await params.commentId
+   const {commentId}=await params
 
    try{
       //check if it is not reply.
