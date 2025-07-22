@@ -1,5 +1,4 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
-import GitHub from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/userModel.js";
 import bcrypt from "bcryptjs";

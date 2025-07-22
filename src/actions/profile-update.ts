@@ -1,6 +1,4 @@
 'use server'
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import db from "@/dbconfig/dbconfig";
 import User from "@/models/userModel";
 

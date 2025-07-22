@@ -1,12 +1,8 @@
 "use client";
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import { motion } from "motion/react";
 import { Peddana } from "@next/font/google";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,7 +32,7 @@ const peddana = Peddana({
   weight: "400",
 });
 
-const page = () => {
+const Page = () => {
   const [isPending, startTransition] = useTransition();
   const session=useSession()
   const router = useRouter();
@@ -48,7 +44,6 @@ const page = () => {
   } = useForm<PostFormValues>({ resolver: zodResolver(postSchema) });
 
  
-   const [error, setError] = useState("");
 
   const submission = async (data: PostFormValues) => {
     startTransition(async()=>{
@@ -68,7 +63,13 @@ const page = () => {
       }
     })
   };
-  session.status==='unauthenticated'&& router.back()
+    useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.back(); // or router.push('/login')
+    }
+  }, [session.status, router]);
+
+  if (session.status === "unauthenticated") return null;
   return (
     <div className="px-4 py-4 flex flex-col gap-5">
       <CardTitle
@@ -149,4 +150,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

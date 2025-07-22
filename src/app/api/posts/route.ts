@@ -2,15 +2,6 @@ import { NextResponse } from "next/server";
 import db from "@/dbconfig/dbconfig";
 import Post from "@/models/postModel";
 
-interface response{
-   title:string,
-   description:string,
-   id:string,
-   author:{
-      name:string,
-   },
-   createdAt:string
-}
 
 export async function GET(){
 
@@ -25,12 +16,12 @@ export async function GET(){
       data:res
    })
    }
-   catch(error:any)
+   catch(error)
    {
       return NextResponse.json({
          success:false,
          message:'Post Cannot setched',
-         error:error.message
+         error:error
       })
    }
 }

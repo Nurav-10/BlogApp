@@ -6,8 +6,8 @@ export async function DELETE(request:Request) {
    try {
       await Upvotes.findByIdAndDelete({_id:id,postId:postId,userId:userId})
       return NextResponse.json({success:true,message:'Successfully remove upvote'})
-   } catch (err:any) {
-      return NextResponse.json({success:false,message:err.message})
+   } catch (err) {
+      return NextResponse.json({success:false,message:err})
       
    }
 }

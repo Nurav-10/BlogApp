@@ -280,9 +280,9 @@ const CommentSection = ({ postId }: { postId: string }) => {
               You need to Signin for commenting
             </Link>
           )}
-          <Button type="submit" disabled={isPending} className="mt-2 w-30">
+          {session.data?.user && <Button type="submit" disabled={isPending} className="mt-2 w-30">
           {isPending?'Commenting':'Comment'}
-          </Button>
+          </Button>}
         </form>
         {comments.length !== 0 && (
           <div className="flex flex-col gap-5 py-3 rounded-md border-zinc-300 border px-5">

@@ -40,8 +40,7 @@ export async function POST(req: NextRequest) {
       success: true,
       url: result.secure_url,
     });
-  } catch (err: any) {
-    console.error("Upload Error:", err);
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  } catch (err) {
+    return NextResponse.json({ success: false, error: err }, { status: 500 });
   }
 }

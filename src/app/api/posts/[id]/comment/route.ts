@@ -27,10 +27,10 @@ export async function GET(
       message: "Be the first one to comment",
       data:[]
     });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json({
       success: false,
-      messgae: error.messgae,
+      message: error,
     });
   }
 }

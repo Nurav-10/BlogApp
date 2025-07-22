@@ -2,7 +2,6 @@ import db from "@/dbconfig/dbconfig";
 import User from "@/models/userModel";
 import bcrypt, { genSalt } from "bcryptjs";
 import { NextResponse } from "next/server";
-import { success } from "zod/v4";
 
 export async function POST(req: Request) {
   await db();
@@ -36,10 +35,10 @@ export async function POST(req: Request) {
         success: true,
         message: "User created successfully",
       });
-  } catch (err: any) {
+  } catch (err) {
     return NextResponse.json({
       success: false,
-      message: err.message,
+      message: err,
     });
   }
 }

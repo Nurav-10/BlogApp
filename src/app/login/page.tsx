@@ -2,13 +2,15 @@
 import { Loginform } from "@/components/clientActions/loginform"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useEffect } from "react"
 
 const page = () => {
   const session=useSession()
   const router=useRouter()
-  session.status==='authenticated'&&
-  router.push('/')
+  useEffect(()=>{
+    if(session.status==='authenticated') 
+      router.push('/')
+  },[session.status])
    return <Loginform/>
     
 }

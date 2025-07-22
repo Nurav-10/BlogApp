@@ -1,7 +1,6 @@
 import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
 import { NextResponse } from "next/server";
-import { success } from "zod/v4";
 
 export async function POST(
   request: Request,
@@ -27,10 +26,10 @@ export async function POST(
         message: "Comment not posted",
       });
     }
-  } catch (err: any) {
+  } catch (error) {
     return NextResponse.json({
       success: false,
-      message: err.message,
+      message: error,
     });
   }
 }

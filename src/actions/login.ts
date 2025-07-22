@@ -1,6 +1,5 @@
 
 import { signIn } from "next-auth/react";
-import db from "@/dbconfig/dbconfig";
 import { CredentialsSignin } from "next-auth";
 export const loginHandler = async (email: string, password: string) => {
   try {

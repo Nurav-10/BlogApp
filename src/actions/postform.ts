@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 await db();
 export async function PostForm(formData: FormData) {
-  const session: any = await auth();
+  const session = await auth();
 
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
@@ -33,8 +33,8 @@ export async function PostForm(formData: FormData) {
       success: true,
       message: "Post created successfully",
     };
-  } catch (error: any) {
-    console.log("Error while creating Post", error.message);
+  } catch (error) {
+    console.log("Error while creating Post");
     return {
       success: false,
       message: "Error while creating post",

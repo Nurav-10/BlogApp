@@ -1,7 +1,6 @@
 import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
 import { NextResponse } from "next/server";
-import { success } from "zod/v4";
 
 export async function DELETE(request:Request,{ params }: { params: { commentId: string } }) {
   const commentId=params.commentId
@@ -23,11 +22,10 @@ export async function DELETE(request:Request,{ params }: { params: { commentId: 
       success: true,
       message: "Comment deleted Successfully",
     });
-  } catch (error: any) {
-     console.log(error.message)
+  } catch (error) {
     return NextResponse.json({
       success: false,
-      message: error.message,
+      message: error,
    });
   }
 }

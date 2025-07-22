@@ -1,13 +1,12 @@
 "use client";
-import { auth } from "@/auth";
 import CommentSection from "@/components/commentSection";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardTitle } from "@/components/ui/card";
+import { CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { date } from "@/utils/date";
-import { ArrowBigUpDash, Cross, CrossIcon, Navigation2, X } from "lucide-react";
+import { ArrowBigUpDash, Navigation2, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
@@ -23,7 +22,7 @@ interface Data {
   _id: string;
 }
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const session = useSession();
   const [isPending, startTransition] = useTransition();
@@ -35,7 +34,6 @@ const page = () => {
   const [vote, setVotes] = useState(0);
   const [voted, setVoted] = useState(false);
   const [voteId,setVoteId]=useState('')
-  const [upvoteData,setUpvoteData]=useState<any|null>(null)
   const { id } = useParams();
 
   useEffect(() => {
@@ -57,8 +55,8 @@ const page = () => {
         } else {
           toast.error(res.message);
         }
-      } catch (error: any) {
-        toast.error(error.message);
+      } catch (error) {
+        toast.error("Error while fetching the details");
       }
     };
     fetchDetails();
@@ -79,14 +77,14 @@ const page = () => {
       setVoted(false)
       
         
-      } catch (err: any) {
-        toast.message(err.message);
+      } catch (err) {
+        toast.message("Error while getting votes");
       }
     })();
    
  
     
-  }, [id, refresh]);
+  }, [id, refresh,session.data?.user?.email]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -97,7 +95,7 @@ const page = () => {
     {
       const createUpvote=async()=>{
         try{
-        const response=await fetch(`/api/posts/${id}/upvotes/createUpvote`,
+        await fetch(`/api/posts/${id}/upvotes/createUpvote`,
           {
             method:"POST",
             body:JSON.stringify({postId:id,userId:session.data?.user?.id})
@@ -107,8 +105,8 @@ const page = () => {
         setVoted(true)
         setRefresh(prev=>!prev)
       }
-      catch(err:any){
-        toast.error(err.message)
+      catch(err){
+        toast.error("Problem while upvoting")
       }
       }
       createUpvote()
@@ -127,14 +125,13 @@ const page = () => {
         )
         const res=await response.json()
         if(res.success){
-        console.log(res)
         setVotes(prev=>prev-1)
         setVoted(false)
         setRefresh(prev=>!prev)
         }
       }
-      catch(err:any){
-        console.log(err.message)
+      catch(err){
+        console.log("Problem while removing upvote")
       }
       }
       deleteUpvote()
@@ -164,8 +161,8 @@ const page = () => {
         } else {
           toast.error("Post Cannot Updated Successfully");
         }
-      } catch (error: any) {
-        toast.error(error.message);
+      } catch (error) {
+        toast.error("post can't updated");
       }
     });
   };
@@ -181,8 +178,8 @@ const page = () => {
       } else {
         toast.error("Post deletion failed");
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error) {
+      toast.error("Problem while deleting the post");
     }
   };
 
@@ -334,4 +331,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -13,8 +13,8 @@ export async function POST(request:Request){
 
       return NextResponse.json({success:true,message:'Voted Successfully'})
    }
-   catch(err:any)
+   catch(err)
    {
-      return NextResponse.json({success:true,message:err.message})
+      return NextResponse.json({success:true,message:err})
    }
 }

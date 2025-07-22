@@ -28,9 +28,8 @@ export async function POST(request:Request,{params}:{params:{postId:string}}){
       return NextResponse.json({success:true,reply},{status:201});
    }
 
-   catch(err:any){
-      console.log('Reply API Error:',err.message);
-      return NextResponse.json({success:false,status:500,error:err.message})
+   catch(err){
+      return NextResponse.json({success:false,status:500,error:err})
 
    }
 }
