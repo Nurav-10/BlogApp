@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import db from "./dbconfig/dbconfig";
 
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     CredentialsProvider({
@@ -15,8 +16,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const email = credentials?.email as string;
-          const password = credentials?.password as string;
+          const email = credentials?.email;
+          const password = credentials?.password;
 
           if (!email || !password) {
             throw new CredentialsSignin("Please provide email and password");
@@ -41,7 +42,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email: user.email,
               id: user._id.toString(),
               name: user.username,
-              image: user.profilePicture,
+              image: user.profilePicture.toString(),
               // You can add other non-sensitive user properties here
             };
           }
@@ -66,29 +67,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user)
-        {
-          token.id = user.id;
-          token.name = user.name;
-          token.email = user.email;
-          token.image = user.image || null;
-        }
-        await db();
-        const dbUser = await User.findOne({ email: token.email });
-        if (dbUser) {
-          token.image = dbUser.profilePicture || null;
-        }
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+      }
+      await db();
+      const dbUser = await User.findOne({ email: token.email });
+      if (dbUser) {
+        token.image = dbUser.profilePicture || null;
+      }
 
-        return token;
-      },
-    async session({ session, token, user }) {
+      return token;
+    },
+    session: async ({ session, token }) => {
       if (session.user) {
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
-        session.user.image = token.image || null;
+        session.user.image = token.image;
       }
       return session;
     },
-  }
-})
+  },
+});
