@@ -1,8 +1,8 @@
 import db from "@/dbconfig/dbconfig";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Comment } from "@/models/commentModel";
 
-export async function DELETE(request:Request,{params}:{params:{id:string;commentId:string}}){
+export async function DELETE(request:NextRequest,{params}:{params:{id:string;commentId:string}}){
 
    await db()
    const {commentId}=await params
