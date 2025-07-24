@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Upvotes from '@/models/upvotesModel'
-export async function GET(request:Request,{params}:{params:{id:string}}){
+export async function GET({params}:{params:{id:string}}){
 
    const {id}=await params
    try{
