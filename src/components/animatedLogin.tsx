@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { Oswald } from "@next/font/google";
 import { Lora } from "@next/font/google";
 import { motion } from "motion/react";
 import Image from "next/image";

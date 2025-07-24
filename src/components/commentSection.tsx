@@ -1,111 +1,23 @@
 "use client";
 import React, { useEffect, useState, useTransition } from "react";
-import { Card, CardHeader } from "./ui/card";
+import { Card } from "./ui/card";
 import { toast } from "sonner";
 import Image from "next/image";
-import { url } from "inspector";
+
 import {
   ArrowDown,
-  Delete,
-  DeleteIcon,
-  LucideDelete,
   ThumbsDown,
   ThumbsUp,
-  Trash,
-  Trash2,
   TrashIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Input } from "./ui/input";
-import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
 import { timeAgo } from "@/utils/date";
 import Link from "next/link";
 
-// const fakeComments = [
-//   {
-//     profilePic:
-//       "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     id: 1,
-//     author: {
-//       username: "@Varun",
-//       id: "21",
-//     },
-//     content: "Hello there this is first comment of my blog webapp",
-//     replies: [
-//       {
-//         profilePic:
-//           "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//         author: {
-//           username: "Shivam",
-//           id: "87",
-//         },
-//         content: "this is 1 nested comment",
-//       },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     profilePic:
-//       "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     author: {
-//       username: "@Himanshi",
-//       id: "54",
-//     },
-//     content: "Hello there this is second comment of my blog webapp",
-//     replies: [
-//       {
-//         profilePic:
-//           "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//         author: {
-//           username: "@Nurav",
-//           id: "45",
-//         },
-//         content: "this is 2nd nested comment",
-//       },
-//       {
-//         profilePic:
-//           "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//         author: {
-//           name: "@Alex",
-//           id: "14",
-//         },
-//         content: "this is 3rd nested comment",
-//       },
-//     ],
-//   },
-//   {
-//     id: 3,
-//     profilePic:
-//       "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?q=80&w=1085&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     author: {
-//       username: "@ravi",
-//       id: "78",
-//     },
-//     content: "Hello there this is third comment of my blog webapp",
-//     replies: [
-//       {
-//         profilePic:
-//           "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//         author: {
-//           username: "@Juiki",
-//           id: "68",
-//         },
-//         content: "this is 2nd nested comment of third comment",
-//       },
-//       {
-//         profilePic:
-//           "https://plus.unsplash.com/premium_photo-1673866484792-c5a36a6c025e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//         author: {
-//           username: "@Naruro",
-//           id: "73",
-//         },
-//         content: "this is 3rd nested comment of 3rd comment",
-//       },
-//     ],
-//   },
-// ];
+
 interface Author {
   _id: string;
   username: string;
@@ -120,7 +32,6 @@ interface Comment {
 }
 const CommentSection = ({ postId }: { postId: string }) => {
   const session = useSession();
-  const router = useRouter();
   const [refresh, setRefresh] = useState(false);
   const [isPending,startTransition]=useTransition()
   const [comments, setComments] = useState<Comment[]>([]);

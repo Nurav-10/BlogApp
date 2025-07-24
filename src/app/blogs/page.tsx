@@ -32,7 +32,7 @@ const BlogsPage = () => {
           setData(res.data);
           if (session.status === "authenticated") setCanCreate(true);
         }
-      } catch (error) {
+      } catch {
         toast.error("Post Fetching failed");
       }
     };

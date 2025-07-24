@@ -1,10 +1,9 @@
 'use client'
 import Header from '@/components/header'
-import React from 'react'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import ProfileUpload from '@/components/profilePicture'
-const page = () => {
+const Page = () => {
 
    const session=useSession()
 
@@ -41,4 +40,4 @@ const page = () => {
     </>
 }
 
-export default page
+export default Page

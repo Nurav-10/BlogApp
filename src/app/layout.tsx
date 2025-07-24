@@ -2,7 +2,6 @@ import type React from "react"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
-import { SessionProvider } from "next-auth/react"
 import Provider from "./providers"
 export const metadata = {
   title: "DevBlog - A Modern Blog Platform for Developers",

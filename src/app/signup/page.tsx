@@ -2,29 +2,32 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardFooter,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AnimatedLogin from "@/components/animatedLogin";
-import Header from "@/components/header";
 import { useSession } from "next-auth/react";
 
 
-const page = () => {
+const Page = () => {
   const router=useRouter()
   const [username,setUsername]=useState('')
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
   const session=useSession()
+
+  useEffect(()=>{
+    if(session.status==='authenticated')
+     router.push('/')
+  },[session.status])
 
   const handleSignup=async()=>{
     if(!username || !email || !password)
@@ -46,12 +49,12 @@ const page = () => {
         toast.error('User already existed')
       }
     }
-    catch(err:any)
+    catch
     {
-      toast.error(err.message)
+      toast.error("Error while registering the user")
     }
   }
-  session.status==='authenticated'&& router.push('/')
+  
   return (
   <>
     <div className="w-screen h-screen text-white flex flex-row justify-center items-center overflow-x-hidden">
@@ -128,4 +131,4 @@ const page = () => {
     </>
     )
   }
-export default page;
+export default Page;

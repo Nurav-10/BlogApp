@@ -5,13 +5,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Code, Cross, CrossIcon, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { title } from "process";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Loader from "./loader";
 import Image from "next/image";
-import { Card } from "./ui/card";
 import { useProfileStore } from "@/store/profileStore";
 import { signOut } from "next-auth/react";
 
@@ -39,12 +36,6 @@ export default function Header() {
       href: "/blogs",
     },
   ];
-
-  interface ProfileDetails {
-    name: string;
-    email: string;
-    image: string;
-  }
 
 
   if (session.status === "loading") return <h2>Loading...</h2>;
