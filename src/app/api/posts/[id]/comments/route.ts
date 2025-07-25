@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
-export async function GET(
+export async function GET(request:Request,
   { params }: { params: { id: string } }) {
   await db();
   const { id } = await params;

@@ -6,10 +6,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string; commentId: string } }
 ) {
-  const commentId = params.commentId;
-  const postId = params.id;
+  const commentId =await params.commentId;
 
-  if (!commentId || !postId) {
+  if (!commentId) {
     return NextResponse.json({
       success: false,
       message: "Error while deleting the comment",

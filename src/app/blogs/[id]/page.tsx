@@ -155,7 +155,6 @@ const Page = () => {
 
         if (response.success) {
           toast.success("Post Updated Successfully");
-          console.log(response.data);
           setRefresh((prev) => !prev);
           setEdit(false);
         } else {
@@ -170,7 +169,6 @@ const Page = () => {
     try {
       const response = await fetch(`/api/posts/delete/${id}`);
       const res = await response.json();
-      console.log(res);
 
       if (res.success) {
         toast.success("Post Deleted Successfully");

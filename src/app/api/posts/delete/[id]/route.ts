@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 db()
 
-export async function GET({params}:{params:{id:string}}){
+export async function GET(request:Request,{params}:{params:{id:string}}){
    await db()
    const {id}=await params
    try{

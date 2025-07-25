@@ -72,7 +72,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   const deleteComment = async (commentId: string) => {
     try {
       const res = await fetch(
-        `/api/posts/${postId}/comments/${commentId}/delete`,
+        `/api/posts/${postId}/comments/${commentId}`,
         {
           method: "DELETE",
         }

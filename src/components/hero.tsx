@@ -47,15 +47,14 @@ export default function Hero() {
             <Sparkles className="mr-1 inline-block h-4 w-4" /> New Blog Platform
             for Developers
           </motion.div>
-          <motion.h1
-            variants={item}
-            className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-8xl"
+          <h1
+            className="text-4xl font-bold tracking-tighter md:text-6xl"
           >
             Code. Write.{" "}
             <span className="bg-gradient-to-tr from-yellow-300 to-blue-400 bg-clip-text text-transparent">
               Share.
             </span>
-          </motion.h1>
+          </h1>
           <motion.p
             variants={container}
             className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mb-5"

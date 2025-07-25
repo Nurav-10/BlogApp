@@ -3,7 +3,7 @@ import db from "@/dbconfig/dbconfig";
 import Post from "@/models/postModel";
 
 
-export async function GET(){
+export async function GET(request:Request){
 
    await db()
    //db call
