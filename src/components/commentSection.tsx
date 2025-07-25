@@ -47,7 +47,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     try {
       (async () => {
         //logic to get comments.
-        const response = await fetch(`/api/posts/${postId}/comment`);
+        const response = await fetch(`/api/posts/${postId}/comments`);
 
         const res = await response.json();
 
@@ -72,7 +72,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   const deleteComment = async (commentId: string) => {
     try {
       const res = await fetch(
-        `/api/posts/${postId}/comment/${commentId}/delete`,
+        `/api/posts/${postId}/comments/${commentId}/delete`,
         {
           method: "DELETE",
         }
@@ -91,7 +91,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     
       startTransition(async()=>{
         try {
-      const res = await fetch(`/api/posts/${postId}/comment/create`, {
+      const res = await fetch(`/api/posts/${postId}/comments/create`, {
         method: "POST",
         body: JSON.stringify({
           content: content,
@@ -119,7 +119,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     startTransition(async()=>{
 
       try {
-        const response = await fetch(`/api/posts/${postId}/comment/reply`, {
+        const response = await fetch(`/api/posts/${postId}/comments/reply`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -143,7 +143,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
   const deleteReply = async (commentId: string) => {
     const response = await fetch(
-      `/api/posts/${postId}/comment/${commentId}/replyDelete`,
+      `/api/posts/${postId}/comments/${commentId}/replyDelete`,
       {
         method: "DELETE",
       }

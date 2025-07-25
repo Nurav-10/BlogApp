@@ -1,9 +1,9 @@
 import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   await db();

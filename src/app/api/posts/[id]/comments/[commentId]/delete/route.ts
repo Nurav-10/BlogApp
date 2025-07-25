@@ -2,12 +2,21 @@ import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request:NextRequest,
-  { params }: { params: {id:string;commentId: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string; commentId: string } }
+) {
+  const commentId = params.commentId;
+  const postId = params.id;
 
-  const commentId=params.commentId
-  const postId=params.id
-
+  if (!commentId || !postId) {
+    return NextResponse.json({
+      success: false,
+      message: "Error while deleting the comment",
+    });
+  }
+  
+  try {
   await db();
 
   async function deleteWithReplies(id: string) {
@@ -18,7 +27,6 @@ export async function DELETE(request:NextRequest,
     await Comment.findByIdAndDelete(id);
   }
 
-  try {
     await deleteWithReplies(commentId);
 
     return NextResponse.json({
@@ -29,6 +37,6 @@ export async function DELETE(request:NextRequest,
     return NextResponse.json({
       success: false,
       message: error,
-   });
+    });
   }
 }

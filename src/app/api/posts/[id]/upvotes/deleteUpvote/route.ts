@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Upvotes from '@/models/upvotesModel'
-export async function DELETE(request:Request) {
+export async function DELETE(request:NextRequest) {
    const {userId,postId,id}=await request.json()
    console.log(userId,postId,id)
    try {
