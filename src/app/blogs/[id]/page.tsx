@@ -117,7 +117,7 @@ const Page = () => {
   const decreaseUpvote=()=>{
       const deleteUpvote=async()=>{
         try{
-        const response=await fetch(`/api/posts/${id}/upvotes/deleteUpvote`,
+        const response=await fetch(`/api/posts/${id}/upvotes/delUpvote`,
           {
             method:"DELETE",
             body:JSON.stringify({id:voteId,postId:id,userId:session.data?.user?.id})
@@ -167,7 +167,7 @@ const Page = () => {
   };
   const deletePost = async (id: string) => {
     try {
-      const response = await fetch(`/api/posts/delete/${id}`);
+      const response = await fetch(`/api/posts/del/${id}`);
       const res = await response.json();
 
       if (res.success) {
