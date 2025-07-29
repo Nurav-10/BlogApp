@@ -1,6 +1,7 @@
 import db from "@/dbconfig/dbconfig";
 import Post from "@/models/postModel";
-import { NextResponse } from "next/server";
+import { Comment } from "@/models/commentModel";
+import { NextResponse,NextRequest } from "next/server";
 
 export async function GET(request:Request,
   { params }: { params: { id: string } }
@@ -29,4 +30,67 @@ export async function GET(request:Request,
       message: error.message,
     });
   }
+}
+
+export async function DELETE(request:Request,{params}:{params:{id:string}}){
+   await db()
+   const {id}=await params
+   try{
+      await Comment.deleteMany({post:id})
+      
+       await Post.findByIdAndDelete(id)
+     
+         return NextResponse.json({
+            success:true,
+            message:'Post Deleted Successfully'
+         })
+
+      }
+   catch(error)
+   {
+      return NextResponse.json({
+         success:false,
+         message:error
+      })
+   }
+
+}
+
+//for editing.
+
+
+
+export async function PATCH(request:Request,{params}:{params:{id:string}})
+{
+   await db()
+   try {
+      const {id}=await params
+      const body=await request.json()
+      const updatedPost=await Post.findByIdAndUpdate(id,body,{
+         new:true,
+         runValidators:true
+      })
+
+      if(updatedPost)
+      {
+         return NextResponse.json({
+            success:true,
+            message:'Post Updated Successfully',
+            data:updatedPost
+         })
+
+      }
+      else{
+         return NextResponse.json({
+            success:false,
+            message:'Post not found',
+            status:404
+         })
+      }
+   } catch (error:any) {
+      return NextResponse.json({
+         success:false,
+         message:error.message
+      })
+   }
 }

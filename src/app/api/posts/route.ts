@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import db from "@/dbconfig/dbconfig";
 import Post from "@/models/postModel";
+import { Comment } from "@/models/commentModel";
 
 
 export async function GET(request:Request){
@@ -25,3 +26,5 @@ export async function GET(request:Request){
       })
    }
 }
+
+

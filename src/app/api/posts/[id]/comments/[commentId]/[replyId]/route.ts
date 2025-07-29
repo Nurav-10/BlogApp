@@ -1,9 +1,9 @@
 import db from "@/dbconfig/dbconfig";
 import { NextRequest, NextResponse } from "next/server";
 import { Comment } from "@/models/commentModel";
-import { success } from "zod/v4";
 
-export async function DELETE(request:NextRequest,{params}:{params:{id:string;commentId:string}}){
+
+export async function DELETE(request:NextRequest,{params}:{params:{id:string;commentId:string,replyId:string}}){
 
    await db()
    const {commentId}=await params

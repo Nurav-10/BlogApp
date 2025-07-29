@@ -91,7 +91,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     
       startTransition(async()=>{
         try {
-      const res = await fetch(`/api/posts/${postId}/comments/create`, {
+      const res = await fetch(`/api/posts/${postId}/comments`, {
         method: "POST",
         body: JSON.stringify({
           content: content,
@@ -143,7 +143,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
   const deleteReply = async (commentId: string) => {
     const response = await fetch(
-      `/api/posts/${postId}/comments/${commentId}/replies`,
+      `/api/posts/${postId}/comments/${commentId}/${commentId}`,
       {
         method: "DELETE",
       }

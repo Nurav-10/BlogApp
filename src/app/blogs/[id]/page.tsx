@@ -63,7 +63,7 @@ const Page = () => {
 
     (async () => {
       try {
-        const response = await fetch(`/api/posts/${id}/upvotes/countUpvote`, {
+        const response = await fetch(`/api/posts/${id}/upvotes`, {
           method: "GET",
         });
         const res = await response.json();
@@ -95,7 +95,7 @@ const Page = () => {
     {
       const createUpvote=async()=>{
         try{
-        await fetch(`/api/posts/${id}/upvotes/createUpvote`,
+        await fetch(`/api/posts/${id}/upvotes`,
           {
             method:"POST",
             body:JSON.stringify({postId:id,userId:session.data?.user?.id})
@@ -117,7 +117,7 @@ const Page = () => {
   const decreaseUpvote=()=>{
       const deleteUpvote=async()=>{
         try{
-        const response=await fetch(`/api/posts/${id}/upvotes/delUpvote`,
+        const response=await fetch(`/api/posts/${id}/upvotes`,
           {
             method:"DELETE",
             body:JSON.stringify({id:voteId,postId:id,userId:session.data?.user?.id})
@@ -142,7 +142,7 @@ const Page = () => {
     e.preventDefault();
     startTransition(async () => {
       try {
-        const res = await fetch(`/api/posts/edit/${id}`, {
+        const res = await fetch(`/api/posts/${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -167,7 +167,9 @@ const Page = () => {
   };
   const deletePost = async (id: string) => {
     try {
-      const response = await fetch(`/api/posts/del/${id}`);
+      const response = await fetch(`/api/posts/${id}`,{
+        method:'DELETE'
+      });
       const res = await response.json();
 
       if (res.success) {
