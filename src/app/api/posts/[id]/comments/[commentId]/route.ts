@@ -17,6 +17,19 @@ export async function DELETE(
   
   try {
   await db();
+  
+        const reply=await Comment.findById({_id:commentId})
+  
+        if(!reply)
+           return NextResponse.json({success:false,message:'Comment not found'})
+  
+        //comment with no replies
+        if(reply.replies){
+        //if there is reply.
+        await Comment.findByIdAndDelete(commentId)
+  
+        return NextResponse.json({success:true,message:'Reply deleted successfully'})
+        }
 
   async function deleteWithReplies(id: string) {
     const replies = await Comment.find({ replies: id });

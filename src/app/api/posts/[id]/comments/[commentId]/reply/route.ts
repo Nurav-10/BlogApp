@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Comment } from "@/models/commentModel";
 
 
-export async function DELETE(request:NextRequest,{params}:{params:{id:string;commentId:string,replyId:string}}){
+export async function DELETE(request:NextRequest,{params}:{params:{id:string;commentId:string}}){
 
    await db()
    const {commentId}=await params
@@ -24,7 +24,7 @@ export async function DELETE(request:NextRequest,{params}:{params:{id:string;com
       //if there is reply.
       await Comment.findByIdAndDelete(commentId)
 
-      return NextResponse.json({success:false,message:'Reply deleted successfully'})
+      return NextResponse.json({success:true,message:'Reply deleted successfully'})
    }
    catch(error){
       return NextResponse.json({success:false,message:error})

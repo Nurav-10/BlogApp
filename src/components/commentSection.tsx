@@ -62,6 +62,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
       console.log(err.message);
     }
   }, [postId, reloadComment, refresh]);
+
+
   const toggleReply = (id: string) => {
     //if already opened. filter it out. if not then open it
 
@@ -113,6 +115,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
     }
   })
   };
+
+  
   const createReply = async (parentCommentId: string) => {
     if (commentReply.length < 1)
       return toast.success("Reply can be of atleast 1 character");
@@ -143,7 +147,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
   const deleteReply = async (commentId: string) => {
     const response = await fetch(
-      `/api/posts/${postId}/comments/${commentId}/${commentId}`,
+      `/api/posts/${postId}/comments/${commentId}`,
       {
         method: "DELETE",
       }
