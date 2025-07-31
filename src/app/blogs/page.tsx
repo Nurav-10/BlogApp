@@ -43,7 +43,7 @@ const BlogsPage = () => {
     <>
       <Header />
       <div className="flex">
-        <div className="flex flex-row gap-1 absolute top-10">
+        <div className="flex flex-row gap-1 absolute top-12">
           <button
             className={`md:hidden block rounded-full  -rotate-90`}
             onClick={() => router.back()}

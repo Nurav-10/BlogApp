@@ -42,13 +42,13 @@ export const Loginform = () => {
               toast.error(String(error), { id: toastId });
             }}
   return (
-    <div className="w-screen h-[91vh] text-white flex  justify-center items-center overflow-x-hidden">
+    <div className="mx-auto w-[90vw] h-[91vh] text-white flex  justify-center items-center overflow-x-hidden">
 
       <Card className="w-full max-w-sm border border-black to-white-300">
        
             <form onSubmit={handleSubmit}>
           <CardHeader>
-            <CardTitle className="text-2xl mb-8">Login</CardTitle>
+            <CardTitle className="text-xl mb-5 border-2 border-pink-300/40 bg-gradient-to-bl from-yellow-300/80 to-red-400/80 w-fit rounded-md px-4 py-1 text-transparent bg-clip-text">Login</CardTitle>
           </CardHeader>
           <CardContent className="mb-5">
             <div className="flex flex-col gap-6">

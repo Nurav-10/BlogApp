@@ -35,14 +35,18 @@ export default function Header() {
       title: "Blogs",
       href: "/blogs",
     },
+    {
+      title:"SignUp",
+      href:'/signup'
+    }
   ];
 
 
   if (session.status === "loading") return <h2>Loading...</h2>;
   return (
-    <motion.header className="w-screen border-b-1 border-zinc-40 flex justify-around flex-row px-4 items-center overflow-hidden">
-      <div className="container overflow-x-hidden w-full relative flex h-[8vh] items-center px-5 md:px-2  justify-between sm:space-x-0 0">
-        <div className="logo flex gap-2 items-center ">
+    <motion.header className="w-screen z-99 border-b-1 border-zinc-40 flex justify-around flex-row px-2 sm:px-8 items-center overflow-hidden">
+      <div className="container overflow-x-hidden w-full relative flex h-[8vh] items-center px-4 md:px-2  justify-between sm:space-x-0 0">
+        <div className="logo flex gap-1 items-center ">
           <Code color="pink" size={20} />
           <h2 className="text-xl font-semibold mb-0.5 ">DevBlog</h2>
         </div>
@@ -59,18 +63,10 @@ export default function Header() {
             );
           })}
         </nav>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          {!session.data?.user?.email && (
-            <Button
-              className="font-semibold bg-gradient-to-bl from-red-300 to-blue-300"
-              onClick={() => router.push("/signup")}
-            >
-              Sign Up
-            </Button>
-          )}
           <Menu
-            className={`hover:bg-zinc-700 hover:text-white ${
+            className={`hover:bg-zinc-700  hover:text-white ${
               bugerMenu ? "hidden" : "flex"
             } md:hidden transition-all duration-200 rounded-full w-8 h-8 p-1`}
             onClick={() => setBurgerMenu((prev) => !prev)}
@@ -84,10 +80,10 @@ export default function Header() {
           {!session.data?.user?.image ? (
             <Image
               src="https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-profile-picture-business-profile-woman-suitable-social-media-profiles-icons-screensavers-as-templatex9_719432-1310.jpg?semt=ais_hybrid&w=740"
-              width={10}
-              height={10}
+              width={100}
+              height={100}
               alt="profileImage"
-              className="w-10 h-10 rounded-full relative"
+              className="w-8 h-8 rounded-full relative"
               onClick={toggleModal}
             />
           ):
@@ -96,7 +92,7 @@ export default function Header() {
               width={100}
               height={100}
               alt="profileImage"
-              className="w-10 h-10 rounded-full object-cover border border-zinc-600 relative"
+              className="w-8 h-8 rounded-full object-cover border border-zinc-600 relative"
               onClick={toggleModal}
             />
           }

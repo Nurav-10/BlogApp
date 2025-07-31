@@ -29,7 +29,7 @@ export default function Hero() {
 
   const session = useSession();
   return (
-    <section className="w-full flex py-12 md:py-24 justify-center lg:py-32 xl:py-38">
+    <section className="w-full flex  justify-center py-16 md:py-20">
 
       <div className="container px-4 md:px-6">
         <motion.div
@@ -40,7 +40,7 @@ export default function Hero() {
         >
           <motion.div
             variants={item}
-            className="inline-block rounded-lg bg-pink-300 px-3 py-1 text-sm text-white dark:text-gray-900"
+            className="inline-block rounded-lg bg-pink-300 px-3 py-1 text-sm text-white dark:text-gray-900 mb-6"
           >
             <Sparkles className="mr-1 inline-block h-4 w-4" /> New Blog Platform
             for Developers
@@ -82,7 +82,7 @@ export default function Hero() {
           </motion.div>
           <motion.div
             variants={item}
-            className="mt-8 grid grid-cols-3 gap-8 rounded-lg border bg-gradient-to-br from-pink-300/10 via-blue-400/10 to-emerald-400/10 p-4 md:p-8"
+            className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-12 rounded-lg border bg-gradient-to-br from-pink-300/10 via-blue-400/10 to-emerald-400/10 p-4 md:p-8"
           >
             <div className="flex flex-col items-center gap-2">
               <Code2 className="h-8 w-8 text-pink-300" />

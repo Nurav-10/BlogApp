@@ -42,7 +42,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email: user.email,
               id: user._id.toString(),
               name: user.username,
-              image: user.profilePicture.toString(),
+              image: user.profilePicture,
               // You can add other non-sensitive user properties here
             };
           }

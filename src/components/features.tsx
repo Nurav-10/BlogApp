@@ -82,13 +82,13 @@ export default function Features() {
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
+        <div className="mx-auto grid  max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
           <motion.div
             ref={ref}
             variants={container}
             initial="hidden"
             animate={isInView ? "show" : "hidden"}
-            className="grid gap-6"
+            className="grid  gap-6"
           >
             {features.map((feature, index) => {
               return (

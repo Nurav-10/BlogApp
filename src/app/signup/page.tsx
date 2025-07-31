@@ -40,14 +40,8 @@ const Page = () => {
         body:JSON.stringify({email,password,username})
       })
       const res=await response.json()
-      if(res.success)
-      {
         toast.success('Registered successfully',res.message)
-        router.push('/login')
-      }
-      else{
-        toast.error('User already existed')
-      }
+        router.push('/login') 
     }
     catch
     {
@@ -59,14 +53,14 @@ const Page = () => {
   <>
     <div className="w-screen h-screen text-white flex flex-row justify-center items-center overflow-x-hidden">
       <AnimatedLogin/>
-      <div className="w-[70%] flex px-2 sm:w-[60%] py-5 justify-center">
+      <div className="w-[90vw] flex px-2  py-5 justify-center">
         <Card className="w-full max-w-sm border border-black to-white-300">
               <form onSubmit={
                 async(e)=>{e.preventDefault()
                 handleSignup()
               }}>
             <CardHeader>
-              <CardTitle className="text-xl mb-7">Register</CardTitle>
+              <CardTitle className="text-xl mb-5 border-2 border-blue-200/40 bg-gradient-to-bl from-cyan-300/80 to-purple-400/80 w-fit rounded-md px-2 py-1 text-transparent bg-clip-text">Register</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-6">
