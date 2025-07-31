@@ -1,6 +1,5 @@
-
 import { signIn } from "next-auth/react";
-import { CredentialsSignin } from "next-auth";
+
 export const loginHandler = async (email: string, password: string) => {
   try {
     const res = await signIn("credentials", {
@@ -12,10 +11,11 @@ export const loginHandler = async (email: string, password: string) => {
     if (!res || res.error) {
       return res?.error || "Login failed";
     }
+
     return null; // No error
   } catch (error) {
-    console.log(error);
-    const err = error as CredentialsSignin;
-    return err.message;
+    console.error("Login Error:", error);
+    const err = error as Error; // ✅ use Error type
+    return err.message || "Something went wrong";
   }
 };

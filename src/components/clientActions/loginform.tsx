@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { loginHandler } from "@/actions/login";
 import { useRouter } from "next/navigation";
-import React, { useState, useTransition } from "react";
+import React, {  useTransition } from "react";
 export const Loginform = () => {
   const [isPending,startTransition]=useTransition()
   const router = useRouter();
@@ -84,7 +84,7 @@ export const Loginform = () => {
           </CardContent>
           <CardFooter className="flex-col gap-2">
             <Button type="submit" disabled={isPending} className="w-full">
-              {isPending?'Loging in...':'Login'}
+              {isPending?'Logging in...':'Login'}
             </Button>
             {/* <form
               action={async () => {
