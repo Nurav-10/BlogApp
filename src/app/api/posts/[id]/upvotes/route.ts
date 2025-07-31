@@ -1,8 +1,8 @@
 import { NextResponse,NextRequest } from "next/server";
 import Upvotes from '@/models/upvotesModel'
-export async function GET(request:Request,{params}:{params:{id:string}}){
+export async function GET(request:Request,context:{params:Promise<{id:string}>}){
 
-   const {id}=await params
+   const {id}=await context.params
    try{
       const data=await Upvotes.find({postId:id}).populate('userId','email username');
       return NextResponse.json({success:true,data:data})
