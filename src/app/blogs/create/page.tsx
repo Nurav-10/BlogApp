@@ -3,7 +3,7 @@ import React, { useEffect, useTransition } from "react";
 import {
   CardTitle,
 } from "@/components/ui/card";
-import { Peddana } from "@next/font/google";
+import { Peddana } from 'next/font/google'
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";

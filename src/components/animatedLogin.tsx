@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Lora } from "@next/font/google";
+import { Lora } from "next/font/google";
 import { motion } from "motion/react";
 import Image from "next/image";
 import loginBg from "../../public/loginBg.jpg";
