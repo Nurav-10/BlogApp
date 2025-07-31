@@ -15,7 +15,7 @@ import { signOut } from "next-auth/react";
 export default function Header() {
   const router = useRouter();
   const session = useSession();
-  const { profilePicModal, setModal } = useProfileStore();
+  const { profilePicModal } = useProfileStore();
   const toggleModal = useProfileStore((state) => state.toggleModal);
   const [bugerMenu, setBurgerMenu] = useState(false);
   const links = [

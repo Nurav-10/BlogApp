@@ -4,12 +4,12 @@ import { Comment } from "@/models/commentModel";
 import { NextResponse,NextRequest } from "next/server";
 
 export async function GET(request:Request,
-  { params }: { params: { id: string } }
+  context: { params:Promise<{ id: string }> }
 ) {
   await db();
 
   try {
-    const {id}=await params
+    const {id}=await context.params
     const response = await Post.findOne({_id:id,published:true}).populate('author', 'username email ');
     if (!response){
       return NextResponse.json({
@@ -32,9 +32,9 @@ export async function GET(request:Request,
   }
 }
 
-export async function DELETE(request:Request,{params}:{params:{id:string}}){
+export async function DELETE(request:Request,context: { params:Promise<{ id: string }> }){
    await db()
-   const {id}=await params
+   const {id}=await context.params
    try{
       await Comment.deleteMany({post:id})
       
@@ -60,11 +60,11 @@ export async function DELETE(request:Request,{params}:{params:{id:string}}){
 
 
 
-export async function PATCH(request:Request,{params}:{params:{id:string}})
+export async function PATCH(request:Request,context: { params:Promise<{ id: string }> })
 {
    await db()
    try {
-      const {id}=await params
+      const {id}=await context.params
       const body=await request.json()
       const updatedPost=await Post.findByIdAndUpdate(id,body,{
          new:true,

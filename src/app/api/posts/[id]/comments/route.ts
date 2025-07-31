@@ -4,9 +4,9 @@ import { Comment } from "@/models/commentModel";
 
 
 export async function GET(request:Request,
-  { params }: { params: { id: string } }) {
+  context: { params:Promise<{ id: string }> }) {
   await db();
-  const { id } = await params;
+  const { id } = await context.params;
   
   try {
     //Get All Comments for a Post
@@ -40,10 +40,10 @@ export async function GET(request:Request,
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params:Promise<{ id: string }> }
 ) {
   await db();
-  const { id } = await params;
+  const { id } = await context.params;
   try {
     const {content,author} = await request.json();
    const res=await Comment.create({

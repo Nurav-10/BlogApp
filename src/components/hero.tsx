@@ -1,11 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
-import { ArrowRight, Code2, Sparkles, Terminal, X } from "lucide-react";
+import { ArrowRight, Code2, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
-import { useProfileStore } from "@/store/profileStore";
-import { signOut, useSession } from "next-auth/react";
-import { useStore } from "zustand";
+import { useSession } from "next-auth/react";
 export default function Hero() {
   const container = {
     hidden: { opacity: 0 },

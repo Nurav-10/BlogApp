@@ -3,10 +3,11 @@ import { Comment } from "@/models/commentModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string; commentId: string } }
+  request: Request,
+  context: { params: Promise<{ id: string; commentId: string }> }
 ) {
-  const commentId =await params.commentId;
+  const {commentId} =await context.params;
+
 
   if (!commentId) {
     return NextResponse.json({
@@ -14,9 +15,9 @@ export async function DELETE(
       message: "Error while deleting the comment",
     });
   }
-  
-  try {
+   try {
   await db();
+ 
   
         const reply=await Comment.findById({_id:commentId})
   

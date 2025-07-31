@@ -2,12 +2,12 @@ import db from "@/dbconfig/dbconfig";
 import { Comment } from "@/models/commentModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request:NextRequest,{params}:{params:{postId:string}}){
+export async function POST(request:NextRequest,context: { params:Promise<{ postId: string }> }){
 
    await db()
    try{
       const {content,author,parentId}=await request.json();
-      const {postId}=await params
+      const {postId}=await context.params
 
       if(!content || !author || !parentId)
          return NextResponse.json({success:false,message:'Missing fields'})
