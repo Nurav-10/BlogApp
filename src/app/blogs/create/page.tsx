@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useTransition } from "react";
-import {
-  CardTitle,
-} from "@/components/ui/card";
-import { Peddana } from 'next/font/google'
+import { CardTitle } from "@/components/ui/card";
+import { Peddana } from "next/font/google";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -13,7 +11,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PostForm } from "@/actions/postform";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../../../context/authContext";
+
 const postSchema = z.object({
   title: z.string().min(5, "Title should be of atleast 5 characters"),
 
@@ -34,7 +33,7 @@ const peddana = Peddana({
 
 const Page = () => {
   const [isPending, startTransition] = useTransition();
-  const session=useSession()
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   const {
@@ -43,33 +42,31 @@ const Page = () => {
     formState: { errors },
   } = useForm<PostFormValues>({ resolver: zodResolver(postSchema) });
 
- 
-
   const submission = async (data: PostFormValues) => {
-    startTransition(async()=>{
+    startTransition(async () => {
       const formdata = new FormData();
       formdata.append("title", data.title);
       formdata.append("description", data.description);
       formdata.append("content", data.content);
-  
-  
-      const response = await PostForm(formdata)
-      if (response.success) {
+
+      try {
+        const response = await PostForm(formdata);
+
         toast.success("Post Created Successfully");
-        router.push('/blogs')
-      } else {
+        router.push("/blogs");
+      } catch {
         console.log("Failed to create post");
         toast.error("Post Creation Failed Successfully");
       }
-    })
+    });
   };
-    useEffect(() => {
-    if (session.status === "unauthenticated") {
+  useEffect(() => {
+    if (!user?.id) {
       router.back(); // or router.push('/login')
     }
-  }, [session.status, router]);
+  }, [user]);
 
-  if (session.status === "unauthenticated") return null;
+  if (!user?.id) return null;
   return (
     <div className="px-4 py-4 flex flex-col gap-5">
       <CardTitle
@@ -124,14 +121,14 @@ const Page = () => {
             className="mb-4 border gap-2 flex border-white rounded-md px-3 py-1"
           />
           */}
-          <Button
-            type="submit"
-            disabled={isPending}
-            className="font-semibold hover:bg-emerald-200 mt-5 w-fit px-3 py-1"
-          >
-            {isPending ? "Creating post..." : "Create"}
-          </Button>
-          {/*
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="font-semibold hover:bg-emerald-200 mt-5 w-fit px-3 py-1"
+        >
+          {isPending ? "Creating post..." : "Create"}
+        </Button>
+        {/*
           <motion.div className="flex flex-row gap-3">
             {images &&
                  

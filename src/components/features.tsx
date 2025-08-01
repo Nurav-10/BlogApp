@@ -6,11 +6,11 @@ import { Code, Laptop, Palette, Zap } from "lucide-react";
 import blogs from "../../public/blogs.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../context/authContext";
 
 export default function Features() {
   const router = useRouter();
-  const session = useSession();
+  const {user}=useAuth()
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -158,7 +158,7 @@ export default function Features() {
             and building their personal brand.
           </p>
           <div className="flex justify-center gap-4">
-            {!session.data?.user?.email && (
+            {!user?.email && (
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex h-10 items-center justify-center rounded-md bg-gradient-to-r from-pink-300  hover:scale-105 via-blue-400 to-emerald-400 px-8 text-sm text-black font-semibold shadow transition-colors hover:opacity-90"

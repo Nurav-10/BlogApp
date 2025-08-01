@@ -13,9 +13,9 @@ import {
 import { motion } from "motion/react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useSession } from "next-auth/react";
 import { timeAgo } from "@/utils/date";
 import Link from "next/link";
+import { useAuth } from "../../context/authContext";
 
 
 interface Author {
@@ -31,11 +31,11 @@ interface Comment {
   createdAt: string;
 }
 const CommentSection = ({ postId }: { postId: string }) => {
-  const session = useSession();
   const [refresh, setRefresh] = useState(false);
   const [isPending,startTransition]=useTransition()
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
+  const {user}=useAuth()
   const [repliesOpen, setRepliesOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [activeReplyIdsIndex, setActiveReplyIdsIndex] = useState<string[]>([]);
@@ -97,7 +97,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
         method: "POST",
         body: JSON.stringify({
           content: content,
-          author: session.data?.user?.id?.toString(),
+          author:user?.id?.toString(),
           id: postId,
         }),
       });
@@ -128,7 +128,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             content: commentReply,
-            author: session.data?.user?.id?.toString(),
+            author:user?.id?.toString(),
             parentId: parentCommentId,
           }),
         });
@@ -161,7 +161,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     } else toast.error(res.message);
   };
 
-  loading && session.status === "loading" && <h2>Loading</h2>;
+  loading && <h2>Loading</h2>;
   return (
     <>
       <div className="px-10 flex gap-3 flex-col pb-5">
@@ -184,18 +184,18 @@ const CommentSection = ({ postId }: { postId: string }) => {
             placeholder="Write Your Comment"
             name="commentInput"
             value={content}
-            disabled={session.status === "unauthenticated"}
+            disabled={!user?.email}
             onChange={(e) => {
               setContent(e.target.value);
             }}
             className="text-zinc-700"
           />
-          {session.status === "unauthenticated" && (
+          {!user?.id&& (
             <Link href="/login" className="hover:text-blue-400 text-sm">
               You need to Signin for commenting
             </Link>
           )}
-          {session.data?.user && <Button type="submit" disabled={isPending} className="mt-2 w-30">
+          {user?.id && <Button type="submit" disabled={isPending} className="mt-2 w-30">
           {isPending?'Commenting':'Comment'}
           </Button>}
         </form>
@@ -218,7 +218,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                     <div className="text-sm text-zinc-500 flex gap-2 items-center">
                       <h2>{c.author?.username}</h2>
                       <h2>{timeAgo(c.createdAt)}</h2>
-                      {session.data?.user?.id === c.author._id && (
+                      {user?.id === c.author._id && (
                         <TrashIcon
                           size={15}
                           className="hover:fill-red-500 dark:text-white mt-1 text-zinc-800"
@@ -290,7 +290,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                                 <div className="text-sm text-zinc-500 flex gap-2 items-center">
                                   <h2>{r.author?.username}</h2>
                                   <h2>{timeAgo(r.createdAt)}</h2>
-                                  {session.data?.user?.id === r.author._id && (
+                                  {user?.id === r.author._id && (
                                     <TrashIcon
                                       size={15}
                                       className="hover:fill-red-500 dark:text-white mt-1 text-zinc-800"
@@ -349,7 +349,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                               title="replyInput"
                               placeholder="Reply Here"
                               className="mt-1 mb-2"
-                              disabled={session.status === "unauthenticated"}
+                              disabled={!user?.id}
                               value={commentReply}
                               onChange={(e) => setCommentReply(e.target.value)}
                             />

@@ -14,20 +14,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AnimatedLogin from "@/components/animatedLogin";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../../context/authContext";
+
 
 
 const Page = () => {
   const router=useRouter()
+  const {loading,user}=useAuth()
   const [username,setUsername]=useState('')
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
-  const session=useSession()
+
 
   useEffect(()=>{
-    if(session.status==='authenticated')
+    if(user?.id)
      router.push('/')
-  },[session.status])
+  },[user])
 
   const handleSignup=async()=>{
     if(!username || !email || !password)

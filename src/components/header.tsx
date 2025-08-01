@@ -3,18 +3,17 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Code, Cross, CrossIcon, Menu, X } from "lucide-react";
+import { Code, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useProfileStore } from "@/store/profileStore";
-import { signOut } from "next-auth/react";
+import { useAuth } from "../../context/authContext";
 
 export default function Header() {
   const router = useRouter();
-  const session = useSession();
+  const {user,logout}=useAuth()
   const { profilePicModal } = useProfileStore();
   const toggleModal = useProfileStore((state) => state.toggleModal);
   const [bugerMenu, setBurgerMenu] = useState(false);
@@ -36,13 +35,12 @@ export default function Header() {
       href: "/blogs",
     },
     {
-      title:"SignUp",
+      title:"Signup",
       href:'/signup'
     }
   ];
 
 
-  if (session.status === "loading") return <h2>Loading...</h2>;
   return (
     <motion.header className="w-screen z-99 border-b-1 border-zinc-40 flex justify-around flex-row px-2 sm:px-8 items-center overflow-hidden">
       <div className="container overflow-x-hidden w-full relative flex h-[8vh] items-center px-4 md:px-2  justify-between sm:space-x-0 0">
@@ -77,7 +75,7 @@ export default function Header() {
             } duration-200 rounded-full w-7 h-7 p-0.5`}
             onClick={() => setBurgerMenu((prev) => !prev)}
           />
-          {!session.data?.user?.image ? (
+          {!user?.profilePicture ? (
             <Image
               src="https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-profile-picture-business-profile-woman-suitable-social-media-profiles-icons-screensavers-as-templatex9_719432-1310.jpg?semt=ais_hybrid&w=740"
               width={100}
@@ -88,7 +86,7 @@ export default function Header() {
             />
           ):
            <Image
-              src={session.data.user.image}
+              src={user?.profilePicture}
               width={100}
               height={100}
               alt="profileImage"
@@ -106,16 +104,16 @@ export default function Header() {
                 </h2>
                 <X size={20} onClick={toggleModal} className="absolute right-3 rounded-md border border-zinc-400 hover:text-red-500 top-3"/>
                
-                { session.data?
+                { user?
                 <div className="px-4 py-1 flex flex-col gap-1 items-center">
                   <Link href="/profile" className="border hover:bg-blue-500 rounded-md px-2 py-1 border-zinc-400 text-sm">
-                  {session.data?.user?.image?'Update Profile Image':'Add Profile Image'}
+                  {user?.profilePicture?'Update Profile Image':'Add Profile Image'}
                 </Link>
-                <h2 className="">{session.data?.user?.email}</h2>
-                <h2 className="text-right">{session.data?.user?.name}</h2>
+                <h2 className="">{user?.username}</h2>
+                <h2 className="text-right">{user?.email}</h2>
                 <Button
                   className="bg-red-500 text-white font-semibold rounded-md w-32 hover:bg-red-400"
-                  onClick={() => signOut()}
+                  onClick={() => logout()}
                 >
                   Logout
                 </Button></div>

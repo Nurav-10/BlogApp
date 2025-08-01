@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { date } from "@/utils/date";
 import { useRouter } from "next/navigation";
 import Header from "@/components/header";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../../context/authContext";
 
 interface blog {
   title: string;
@@ -19,7 +19,7 @@ interface blog {
 }
 const BlogsPage = () => {
   const router = useRouter();
-  const session = useSession();
+  const {loading,user}=useAuth()
   const [canCreate, setCanCreate] = useState(false);
   const [sideNav, setSideNav] = useState(false);
   const [data, setData] = useState([]);
@@ -30,14 +30,14 @@ const BlogsPage = () => {
         const res = await (await fetch("/api/posts")).json();
         if (res) {
           setData(res.data);
-          if (session.status === "authenticated") setCanCreate(true);
+          if (user?.id) setCanCreate(true);
         }
       } catch {
         toast.error("Post Fetching failed");
       }
     };
     fetchPost();
-  }, [session.status]);
+  }, [user]);
 
   return (
     <>

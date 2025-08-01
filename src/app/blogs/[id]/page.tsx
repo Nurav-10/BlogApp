@@ -7,10 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { date } from "@/utils/date";
 import { ArrowBigUpDash, Navigation2, X } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useAuth } from "../../../../context/authContext";
 
 interface Data {
   title: string;
@@ -24,7 +24,7 @@ interface Data {
 
 const Page = () => {
   const router = useRouter();
-  const session = useSession();
+  const { user, loading } = useAuth();
   const [isPending, startTransition] = useTransition();
   const [data, setData] = useState<Data | null>(null);
   const [modal, setModal] = useState(false);
@@ -33,7 +33,7 @@ const Page = () => {
   const [edit, setEdit] = useState(false);
   const [vote, setVotes] = useState(0);
   const [voted, setVoted] = useState(false);
-  const [voteId,setVoteId]=useState('')
+  const [voteId, setVoteId] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -50,8 +50,7 @@ const Page = () => {
           setNewDescription(res.data.description);
           setNewContent(res.data.content);
 
-          if (session?.data?.user?.email === res.data.author.email)
-            setOwner(true);
+          if (user?.email === res.data.author.email) setOwner(true);
         } else {
           toast.error(res.message);
         }
@@ -67,76 +66,70 @@ const Page = () => {
           method: "GET",
         });
         const res = await response.json();
-           setVotes(res.data.length);
-           
-       if(res.data.filter((i:any)=>(i.userId))[0]){
-        setVoteId(res.data.filter((i:any)=>(i.userId))[0]._id)
-         setVoted(true)
+        setVotes(res.data.length);
+
+        const existingVote = res.data.find(
+          (i: any) => i.userId._id === user?.id
+        );
+
+        if (existingVote) {
+          setVoteId(existingVote._id); // set the actual vote document ID
+          setVoted(true);
+        } else {
+          setVoteId("");
+          setVoted(false);
         }
-      else
-      setVoted(false)
-      
-        
       } catch (err) {
         toast.message("Error while getting votes");
       }
     })();
-   
- 
-    
-  }, [id, refresh,session.data?.user?.email]);
+  }, [id, refresh, user?.email]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newContent, setNewContent] = useState("");
 
+  const increaseUpvote = async () => {
+    try {
+      const res = await fetch(`/api/posts/${id}/upvotes`, {
+        method: "POST",
+        body: JSON.stringify({ postId: id, userId: user?.id }),
+      });
+      const result = await res.json();
 
-   const increaseUpvote = () => 
-    {
-      const createUpvote=async()=>{
-        try{
-        await fetch(`/api/posts/${id}/upvotes`,
-          {
-            method:"POST",
-            body:JSON.stringify({postId:id,userId:session.data?.user?.id})
-          }
-        )
-        setVotes(prev=>prev+1)
-        setVoted(true)
-        setRefresh(prev=>!prev)
+      if (result.success) {
+        setVotes((prev) => prev + 1);
+        setVoted(true);
+        setVoteId(result.data._id);
+        toast.success(result.message)
+        
+         // API should return created vote
       }
-      catch(err){
-        toast.error("Problem while upvoting")
-      }
-      }
-      createUpvote()
+      return
+    } catch{
+      toast.error("Problem while upvoting");
     }
-  
-  
+  };
 
-  const decreaseUpvote=()=>{
-      const deleteUpvote=async()=>{
-        try{
-        const response=await fetch(`/api/posts/${id}/upvotes`,
-          {
-            method:"DELETE",
-            body:JSON.stringify({id:voteId,postId:id,userId:session.data?.user?.id})
-          }
-        )
-        const res=await response.json()
-        if(res.success){
-        setVotes(prev=>prev-1)
-        setVoted(false)
-        setRefresh(prev=>!prev)
-        }
+  const decreaseUpvote = async () => {
+    try {
+      const res = await fetch(`/api/posts/${id}/upvotes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: voteId }),
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        setVotes((prev) => prev - 1);
+        toast.success(result.message)
+        setVoted(false);
+        setVoteId("");
       }
-      catch(err){
-        console.log("Problem while removing upvote")
-      }
-      }
-      deleteUpvote()
+    } catch (err) {
+      toast.error("Problem while removing upvote");
     }
-
+  };
 
   const handleEditForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,8 +160,8 @@ const Page = () => {
   };
   const deletePost = async (id: string) => {
     try {
-      const response = await fetch(`/api/posts/${id}`,{
-        method:'DELETE'
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
       });
       const res = await response.json();
 
@@ -183,7 +176,6 @@ const Page = () => {
     }
   };
 
-  
   if (!data)
     return <h2 className="text-zinc-500 text-xl p-3 ">Loading Post...</h2>;
   return (
@@ -219,19 +211,26 @@ const Page = () => {
         <p>{data.description}</p>
         <p>{data.content}</p>
         <button
-        disabled={!session.data?.user?.email}
+          disabled={!user?.email}
           className={`flex flex-row w-fit gap-2 items-center px-3 py-1 rounded-md border hover:border-blue-400 hover:text-blue-400 ${
             voted && "border-blue-400 text-blue-400 transition  duration-200"
           }`}
           onClick={() => {
-            voted?decreaseUpvote():increaseUpvote() 
+            voted ? decreaseUpvote() : increaseUpvote();
           }}
         >
           <ArrowBigUpDash className="hover:fill-blue-500" size={20} />
           <span>{vote} Upvote</span>
         </button>
-        {!session.data?.user?.email && <h2 className="w-fit px-2 bg-zinc-900/20 hover:text-blue-500 border rounded-md cursor-pointer" onClick={()=>router.push('/login')}>SignIn to Upvote</h2>}
-        {session.data?.user?.email === data.author.email && (
+        {!user?.email && (
+          <h2
+            className="w-fit px-2 bg-zinc-900/20 hover:text-blue-500 border rounded-md cursor-pointer"
+            onClick={() => router.push("/login")}
+          >
+            SignIn to Upvote
+          </h2>
+        )}
+        {user?.email === data.author.email && (
           <div className="flex flex-row gap-2">
             <button
               className={` bg-red-500 w-30 hover:bg-red-700 rounded-md px-3 py-1 border-1 mr-3 text-white border-white`}
@@ -321,7 +320,7 @@ const Page = () => {
           </div>
         )}
 
-        {session.status === "loading" ? (
+        {loading ? (
           <h2>Loading Comments</h2>
         ) : (
           <CommentSection postId={data._id} />

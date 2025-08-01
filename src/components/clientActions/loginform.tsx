@@ -12,41 +12,30 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
 import Link from "next/link";
-import { loginHandler } from "@/actions/login";
 import { useRouter } from "next/navigation";
-import React, {  useTransition } from "react";
+import React, {  useState, useTransition } from "react";
+import { useAuth } from "../../../context/authContext";
+
+
 export const Loginform = () => {
+  const {login}=useAuth()
   const [isPending,startTransition]=useTransition()
   const router = useRouter();
-  
-  
-   const handleSubmit=async(e:React.FormEvent) => {
-            e.preventDefault();
-            const formdata=new FormData(e.currentTarget as HTMLFormElement)
-            const email = formdata.get("email") as string;
-            const password = formdata.get("password") as string;
+  const [password,setPassword]=useState('')
+  const [email,setEmail]=useState('')
 
-            if (!email || !password) {
-              toast.error("Please Provide all fields");
-              return;
-            }
-            const toastId = toast.loading("Logging in...");
-
-            const error = await loginHandler(email, password);
-            if (!error) {
-              toast.success("Login successful!", { id: toastId });
-              startTransition(()=>{
-                router.push("/");
-              })
-            } else {
-              toast.error(String(error), { id: toastId });
-            }}
+  const handleSubmit=async(email:string,password:string)=>{
+    if(!email || !password){
+      toast.error('Please provide all the fields')
+      return
+    }
+    const res=await login(email,password)
+  }
+  
   return (
     <div className="mx-auto w-[90vw] h-[91vh] text-white flex  justify-center items-center overflow-x-hidden">
 
       <Card className="w-full max-w-sm border border-black to-white-300">
-       
-            <form onSubmit={handleSubmit}>
           <CardHeader>
             <CardTitle className="text-xl mb-5 border-2 border-pink-300/40 bg-gradient-to-bl from-yellow-300/80 to-red-400/80 w-fit rounded-md px-4 py-1 text-transparent bg-clip-text">Login</CardTitle>
           </CardHeader>
@@ -58,6 +47,8 @@ export const Loginform = () => {
                   id="email"
                   type="email"
                   name="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                   placeholder="m@example.com"
                   required
                 />
@@ -75,7 +66,9 @@ export const Loginform = () => {
                 <Input
                   id="password"
                   name="password"
+                  value={password}
                   type="password"
+                  onChange={(e)=>setPassword(e.target.value)}
                   required
                   placeholder="Password123"
                 />
@@ -83,7 +76,7 @@ export const Loginform = () => {
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" disabled={isPending} className="w-full">
+            <Button type="submit" onClick={()=>handleSubmit(email,password)} disabled={isPending} className="w-full">
               {isPending?'Logging in...':'Login'}
             </Button>
             {/* <form
@@ -106,9 +99,7 @@ export const Loginform = () => {
               Don't have an account? Signup
             </Link>
           </CardFooter>
-        </form>
       </Card>
-    
     </div>
   );
 };

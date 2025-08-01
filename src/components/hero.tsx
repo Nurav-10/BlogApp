@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { ArrowRight, Code2, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useAuth } from "../../context/authContext";
 export default function Hero() {
   const container = {
     hidden: { opacity: 0 },
@@ -27,7 +27,7 @@ export default function Hero() {
   };
   
 
-  const session = useSession();
+  const {user}=useAuth()
   return (
     <section className="w-full flex  justify-center py-16 md:py-20">
 

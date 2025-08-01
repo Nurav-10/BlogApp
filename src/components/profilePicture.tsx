@@ -2,16 +2,16 @@
 import { useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { UploadImage } from "@/actions/profile-update";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useAuth } from "../../context/authContext";
 
 export default function ProfileUpload() {
   const router = useRouter();
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [isPending, startTransition] = useTransition();
-  const { data, update } = useSession();
+  const {user}=useAuth()
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setImage(e.target.files[0]);
@@ -33,11 +33,10 @@ export default function ProfileUpload() {
 
       const response = await res.json();
       const { url } = response;
-       const email: any = data?.user?.email;
+       const email: any =user?.email;
       const reso = await UploadImage(email, url);
       if (reso.success) {
        // Forces jwt to run again
-       await update({image:url})
         router.push('/');
       } else {
         console.log(response.message);
