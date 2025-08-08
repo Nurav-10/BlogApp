@@ -8,10 +8,6 @@ import Loader from "@/components/loader"
 import { useAuth } from "../../context/authContext"
 
 export default function Home() {
- 
-  const {loading}=useAuth()
-  if(loading)
-    return <Loader/>
   return (
     <div className="min-h-screen w-screen overflow-x-hidden bg-background">
       <main>
