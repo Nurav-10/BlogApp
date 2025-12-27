@@ -101,13 +101,12 @@ const Page = () => {
         setVotes((prev) => prev + 1);
         setVoted(true);
         setVoteId(result.data._id);
-        toast.success(result.message)
         
          // API should return created vote
       }
       return
     } catch{
-      toast.error("Problem while upvoting");
+      
     }
   };
 

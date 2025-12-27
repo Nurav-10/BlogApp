@@ -30,6 +30,7 @@ export async function DELETE(request:NextRequest) {
 export async function POST(request:NextRequest){
 
    const {userId,postId}=await request.json()
+   if(!userId || !postId) return NextResponse.json({success:false,message:"Can't get the info"})
  
    try{
       //check if already upvoted.
@@ -43,6 +44,6 @@ export async function POST(request:NextRequest){
    }
    catch(err)
    {
-      return NextResponse.json({success:false,message:err})
+      return NextResponse.json({success:false})
    }
 }

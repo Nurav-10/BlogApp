@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // ✅ Track the connection status
+let isConnected = false; 
 
 const db = async () => {
   if (isConnected) {
-    console.log("✅ Using existing MongoDB connection");
+    console.log("Using existing MongoDB connection");
     return;
   }
 

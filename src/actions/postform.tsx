@@ -49,7 +49,6 @@ export async function PostForm(formData: FormData) {
 
 
    } catch (error) {
-      console.log("Error while creating Post");
       return {
         success: false,
         message: "Error while creating post",

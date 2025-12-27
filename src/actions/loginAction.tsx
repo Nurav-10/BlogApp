@@ -46,7 +46,8 @@ export const LoginAction = async (email: string, password: string):Promise<ApiRe
       profilePicture:user.profilePicture,
       username:user.username
     };
-    await TokenCreation(payload)
+
+      await TokenCreation(payload)
       return {
         success: true,
         message: "Login Successfully",
